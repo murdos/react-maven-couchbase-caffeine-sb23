@@ -1,22 +1,22 @@
 package io.github.jhipster.sample.config;
 
-import io.github.jhipster.config.JHipsterConstants;
-
 import com.couchbase.client.java.Bucket;
+import com.couchbase.client.java.Cluster;
 import com.github.couchmove.Couchmove;
+import io.github.jhipster.config.JHipsterConstants;
+import io.github.jhipster.config.JHipsterProperties;
 import io.github.jhipster.sample.repository.CustomN1qlCouchbaseRepository;
 import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.autoconfigure.couchbase.CouchbaseAutoConfiguration;
 import org.springframework.boot.autoconfigure.couchbase.CouchbaseProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.convert.ReadingConverter;
 import org.springframework.data.convert.WritingConverter;
+import org.springframework.data.couchbase.config.AbstractCouchbaseConfiguration;
 import org.springframework.data.couchbase.config.BeanNames;
 import org.springframework.data.couchbase.core.convert.CouchbaseCustomConversions;
 import org.springframework.data.couchbase.core.mapping.event.ValidatingCouchbaseEventListener;
@@ -37,12 +37,18 @@ import java.util.UUID;
 @Configuration
 @Profile("!" + JHipsterConstants.SPRING_PROFILE_CLOUD)
 @EnableCouchbaseRepositories(repositoryBaseClass = CustomN1qlCouchbaseRepository.class, basePackages = "io.github.jhipster.sample.repository")
-@EnableCouchbaseAuditing(auditorAwareRef = "springSecurityAuditorAware")
-@Import(value = CouchbaseAutoConfiguration.class)
-public class DatabaseConfiguration {
+@EnableCouchbaseAuditing(auditorAwareRef = "springSecurityAuditorAware", dateTimeProviderRef = "")
+public class DatabaseConfiguration extends AbstractCouchbaseConfiguration {
 
     private final Logger log = LoggerFactory.getLogger(DatabaseConfiguration.class);
 
+    private final JHipsterProperties jHipsterProperties;
+    private final CouchbaseProperties couchbaseProperties;
+
+    public DatabaseConfiguration(JHipsterProperties jHipsterProperties, CouchbaseProperties couchbaseProperties) {
+        this.jHipsterProperties = jHipsterProperties;
+        this.couchbaseProperties = couchbaseProperties;
+    }
 
     @Bean
     public ValidatingCouchbaseEventListener validatingCouchbaseEventListener() {
@@ -53,6 +59,27 @@ public class DatabaseConfiguration {
     public LocalValidatorFactoryBean validator() {
         return new LocalValidatorFactoryBean();
     }
+
+    @Override
+    public String getConnectionString() {
+        return couchbaseProperties.getConnectionString();
+    }
+
+    @Override
+    public String getUserName() {
+        return couchbaseProperties.getUsername();
+    }
+
+    @Override
+    public String getPassword() {
+        return couchbaseProperties.getPassword();
+    }
+
+    @Override
+    public String getBucketName() {
+        return jHipsterProperties.getDatabase().getCouchbase().getBucketName();
+    }
+
     @Bean(name = BeanNames.COUCHBASE_CUSTOM_CONVERSIONS)
     public CouchbaseCustomConversions customConversions() {
         List<Converter<?, ?>> converters = new ArrayList<>();
@@ -69,9 +96,14 @@ public class DatabaseConfiguration {
     }
 
     @Bean
-    public Couchmove couchmove(Bucket couchbaseBucket, CouchbaseProperties properties) {
+    public Bucket bucket(Cluster cluster, JHipsterProperties jHipsterProperties) {
+        return cluster.bucket(jHipsterProperties.getDatabase().getCouchbase().getBucketName());
+    }
+
+    @Bean
+    public Couchmove couchmove(Bucket bucket, Cluster cluster) {
         log.debug("Configuring Couchmove");
-        Couchmove couchmove = new Couchmove(couchbaseBucket, properties.getBucket().getName(), properties.getBucket().getPassword(), "config/couchmove/changelog");
+        Couchmove couchmove = new Couchmove(bucket, cluster, "config/couchmove/changelog");
         couchmove.migrate();
         return couchmove;
     }
@@ -167,8 +199,8 @@ public class DatabaseConfiguration {
     }
 
     /**
-    * Simple singleton to convert {@link UUID}s to their {@link String} representation.
-    */
+     * Simple singleton to convert {@link UUID}s to their {@link String} representation.
+     */
     @WritingConverter
     public enum UUIDToStringConverter implements Converter<UUID, String> {
 
@@ -181,8 +213,8 @@ public class DatabaseConfiguration {
     }
 
     /**
-    * Simple singleton to convert from {@link String} {@link UUID} representation.
-    */
+     * Simple singleton to convert from {@link String} {@link UUID} representation.
+     */
     @ReadingConverter
     public enum StringToUUIDConverter implements Converter<String, UUID> {
 

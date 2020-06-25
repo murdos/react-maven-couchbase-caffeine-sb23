@@ -3,16 +3,17 @@ package io.github.jhipster.sample.repository;
 import org.springframework.data.couchbase.core.CouchbaseOperations;
 import org.springframework.data.couchbase.core.mapping.CouchbasePersistentEntity;
 import org.springframework.data.couchbase.repository.query.CouchbaseEntityInformation;
-import org.springframework.data.couchbase.repository.support.N1qlCouchbaseRepository;
+import org.springframework.data.couchbase.repository.support.SimpleCouchbaseRepository;
 
 import java.io.Serializable;
 
 /**
  * A custom implementation of {@code CouchbaseRepository}.
  */
-public class CustomN1qlCouchbaseRepository<T, ID extends Serializable> extends N1qlCouchbaseRepository<T, ID> {
+public class CustomN1qlCouchbaseRepository<T, ID extends Serializable> extends SimpleCouchbaseRepository<T, ID> {
 
     private final CouchbasePersistentEntity<?> persistentEntity;
+    private final CouchbaseOperations couchbaseOperations;
 
     /**
      * Create a new Repository.
@@ -22,7 +23,8 @@ public class CustomN1qlCouchbaseRepository<T, ID extends Serializable> extends N
      */
     public CustomN1qlCouchbaseRepository(CouchbaseEntityInformation<T, String> metadata, CouchbaseOperations couchbaseOperations) {
         super(metadata, couchbaseOperations);
-        persistentEntity = getCouchbaseOperations().getConverter().getMappingContext().getPersistentEntity(getEntityInformation().getJavaType());
+        this.couchbaseOperations = couchbaseOperations;
+        persistentEntity = couchbaseOperations.getConverter().getMappingContext().getPersistentEntity(getEntityInformation().getJavaType());
     }
 
     @Override
@@ -40,7 +42,7 @@ public class CustomN1qlCouchbaseRepository<T, ID extends Serializable> extends N
         if (getEntityInformation().getId(entity) != null) {
             return entity;
         }
-        setId(entity, getCouchbaseOperations().getGeneratedId(entity));
+//        setId(entity, couchbaseOperations.getGeneratedId(entity));
         return entity;
     }
 

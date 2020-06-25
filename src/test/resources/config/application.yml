@@ -16,6 +16,9 @@
 spring:
   application:
     name: sampleReactCouchbaseCaffeine
+  couchbase:
+    username: jhipster
+    password: password
   jackson:
     serialization:
       write-durations-as-timestamps: false
@@ -52,6 +55,9 @@ server:
 jhipster:
   clientApp:
     name: 'sampleReactCouchbaseCaffeineApp'
+  database:
+    couchbase:
+      bucket-name: testBucket
   logging:
     # To test json console appender
     use-json-format: false

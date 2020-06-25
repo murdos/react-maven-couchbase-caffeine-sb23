@@ -2,6 +2,7 @@ package io.github.jhipster.sample.domain;
 
 import io.github.jhipster.sample.config.Constants;
 
+import org.springframework.data.couchbase.core.mapping.CouchbaseList;
 import org.springframework.data.couchbase.core.mapping.Field;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.commons.lang3.StringUtils;
@@ -17,7 +18,10 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
@@ -86,8 +90,10 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @Field("reset_date")
     private Instant resetDate = null;
 
-    @JsonIgnore
-    private Set<String> authorities = new HashSet<>();
+    private HashSet<String> authorities = new HashSet<>();
+//    private List<String> authorities = new ArrayList<>();
+//    private CouchbaseList authorities = new CouchbaseList();
+//    private String[] authorities = new String[2];
 
 
     public String getId() {
@@ -188,11 +194,25 @@ public class User extends AbstractAuditingEntity implements Serializable {
     }
 
     public Set<String> getAuthorities() {
+//        return new HashSet<>(Arrays.asList(authorities));
+
+//        HashSet<String> newSet = new HashSet<>();
+//        authorities.export().forEach(e -> newSet.add((String)e));
+//        return newSet;
+
+//        return new HashSet<>(authorities);
         return authorities;
     }
 
     public void setAuthorities(Set<String> authorities) {
-        this.authorities = authorities;
+//        this.authorities = authorities.toArray(new String[0]);
+
+//        CouchbaseList couchbaseList = new CouchbaseList();
+//        authorities.stream().forEach(couchbaseList::put);
+//        this.authorities = couchbaseList;
+//
+//        this.authorities = new ArrayList<>(authorities);
+        this.authorities = new HashSet<>(authorities);
     }
 
     @Override
