@@ -1,11 +1,13 @@
 package io.github.jhipster.sample.service;
 
+import io.github.jhipster.sample.CouchbaseTestContainerExtension;
 import io.github.jhipster.sample.domain.PersistentAuditEvent;
 import io.github.jhipster.sample.repository.PersistenceAuditEventRepository;
 import io.github.jhipster.sample.SampleReactCouchbaseCaffeineApp;
 import io.github.jhipster.config.JHipsterProperties;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import static io.github.jhipster.sample.web.rest.TestUtil.mockAuthentication;
@@ -18,6 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * Integration tests for {@link AuditEventService}.
  */
 @SpringBootTest(classes = SampleReactCouchbaseCaffeineApp.class)
+@ExtendWith(CouchbaseTestContainerExtension.class)
 public class AuditEventServiceIT {
     @Autowired
     private AuditEventService auditEventService;

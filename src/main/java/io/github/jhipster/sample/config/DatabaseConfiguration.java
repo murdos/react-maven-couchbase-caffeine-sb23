@@ -5,11 +5,11 @@ import com.couchbase.client.java.Cluster;
 import com.github.couchmove.Couchmove;
 import io.github.jhipster.config.JHipsterConstants;
 import io.github.jhipster.config.JHipsterProperties;
-import io.github.jhipster.sample.repository.CustomN1qlCouchbaseRepository;
 import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.couchbase.CouchbaseProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -36,7 +36,8 @@ import java.util.UUID;
 
 @Configuration
 @Profile("!" + JHipsterConstants.SPRING_PROFILE_CLOUD)
-@EnableCouchbaseRepositories(repositoryBaseClass = CustomN1qlCouchbaseRepository.class, basePackages = "io.github.jhipster.sample.repository")
+@EnableConfigurationProperties(CouchbaseProperties.class)
+@EnableCouchbaseRepositories(basePackages = "io.github.jhipster.sample.repository")
 @EnableCouchbaseAuditing(auditorAwareRef = "springSecurityAuditorAware", dateTimeProviderRef = "")
 public class DatabaseConfiguration extends AbstractCouchbaseConfiguration {
 
@@ -80,6 +81,11 @@ public class DatabaseConfiguration extends AbstractCouchbaseConfiguration {
         return jHipsterProperties.getDatabase().getCouchbase().getBucketName();
     }
 
+    @Bean
+    public Bucket bucket(Cluster cluster) {
+        return cluster.bucket(jHipsterProperties.getDatabase().getCouchbase().getBucketName());
+    }
+
     @Bean(name = BeanNames.COUCHBASE_CUSTOM_CONVERSIONS)
     public CouchbaseCustomConversions customConversions() {
         List<Converter<?, ?>> converters = new ArrayList<>();
@@ -93,11 +99,6 @@ public class DatabaseConfiguration extends AbstractCouchbaseConfiguration {
         converters.add(UUIDToStringConverter.INSTANCE);
         converters.add(StringToUUIDConverter.INSTANCE);
         return new CouchbaseCustomConversions(converters);
-    }
-
-    @Bean
-    public Bucket bucket(Cluster cluster, JHipsterProperties jHipsterProperties) {
-        return cluster.bucket(jHipsterProperties.getDatabase().getCouchbase().getBucketName());
     }
 
     @Bean

@@ -1,10 +1,12 @@
 package io.github.jhipster.sample.web.rest;
 
+import io.github.jhipster.sample.CouchbaseTestContainerExtension;
 import io.github.jhipster.sample.SampleReactCouchbaseCaffeineApp;
 import io.github.jhipster.sample.domain.User;
 import io.github.jhipster.sample.repository.UserRepository;
 import io.github.jhipster.sample.web.rest.vm.LoginVM;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -27,6 +29,7 @@ import static org.hamcrest.Matchers.not;
  */
 @AutoConfigureMockMvc
 @SpringBootTest(classes = SampleReactCouchbaseCaffeineApp.class)
+@ExtendWith(CouchbaseTestContainerExtension.class)
 public class UserJWTControllerIT {
 
     @Autowired

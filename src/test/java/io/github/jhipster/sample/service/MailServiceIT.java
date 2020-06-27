@@ -1,10 +1,8 @@
 package io.github.jhipster.sample.service;
 
-import io.github.jhipster.sample.config.Constants;
-
-import io.github.jhipster.sample.SampleReactCouchbaseCaffeineApp;
-import io.github.jhipster.sample.domain.User;
 import io.github.jhipster.config.JHipsterProperties;
+import io.github.jhipster.sample.config.Constants;
+import io.github.jhipster.sample.domain.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -12,6 +10,8 @@ import org.mockito.Captor;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.context.MessageSourceAutoConfiguration;
+import org.springframework.boot.autoconfigure.thymeleaf.ThymeleafAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.MessageSource;
 import org.springframework.mail.MailSendException;
@@ -33,14 +33,15 @@ import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 /**
  * Integration tests for {@link MailService}.
  */
-@SpringBootTest(classes = SampleReactCouchbaseCaffeineApp.class)
+@SpringBootTest(classes = {ThymeleafAutoConfiguration.class, MessageSourceAutoConfiguration.class, JHipsterProperties.class})
 public class MailServiceIT {
 
     private static final String[] languages = {
@@ -235,7 +236,7 @@ public class MailServiceIT {
         String javaLangKey = langKey;
         Matcher matcher2 = PATTERN_LOCALE_2.matcher(langKey);
         if (matcher2.matches()) {
-            javaLangKey = matcher2.group(1) + "_"+ matcher2.group(2).toUpperCase();
+            javaLangKey = matcher2.group(1) + "_" + matcher2.group(2).toUpperCase();
         }
         Matcher matcher3 = PATTERN_LOCALE_3.matcher(langKey);
         if (matcher3.matches()) {

@@ -5,6 +5,7 @@ import io.github.jhipster.sample.domain.User;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.couchbase.repository.CouchbaseRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -17,7 +18,7 @@ import static io.github.jhipster.sample.config.Constants.ID_DELIMITER;
  * Spring Data Couchbase repository for the {@link User} entity.
  */
 @Repository
-public interface UserRepository extends N1qlCouchbaseRepository<User, String> {
+public interface UserRepository extends CouchbaseRepository<User, String> {
 
     String USERS_BY_LOGIN_CACHE = "usersByLogin";
 
