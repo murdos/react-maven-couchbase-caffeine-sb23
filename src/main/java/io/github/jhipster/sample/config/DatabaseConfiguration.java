@@ -51,15 +51,15 @@ public class DatabaseConfiguration extends AbstractCouchbaseConfiguration {
         this.couchbaseProperties = couchbaseProperties;
     }
 
-    @Bean
-    public ValidatingCouchbaseEventListener validatingCouchbaseEventListener() {
-        return new ValidatingCouchbaseEventListener(validator());
-    }
-
-    @Bean
-    public LocalValidatorFactoryBean validator() {
-        return new LocalValidatorFactoryBean();
-    }
+//    @Bean
+//    public ValidatingCouchbaseEventListener validatingCouchbaseEventListener() {
+//        return new ValidatingCouchbaseEventListener(validator());
+//    }
+//
+//    @Bean
+//    public LocalValidatorFactoryBean validator() {
+//        return new LocalValidatorFactoryBean();
+//    }
 
     @Override
     public String getConnectionString() {
@@ -200,8 +200,8 @@ public class DatabaseConfiguration extends AbstractCouchbaseConfiguration {
     }
 
     /**
-     * Simple singleton to convert {@link UUID}s to their {@link String} representation.
-     */
+    * Simple singleton to convert {@link UUID}s to their {@link String} representation.
+    */
     @WritingConverter
     public enum UUIDToStringConverter implements Converter<UUID, String> {
 
@@ -214,8 +214,8 @@ public class DatabaseConfiguration extends AbstractCouchbaseConfiguration {
     }
 
     /**
-     * Simple singleton to convert from {@link String} {@link UUID} representation.
-     */
+    * Simple singleton to convert from {@link String} {@link UUID} representation.
+    */
     @ReadingConverter
     public enum StringToUUIDConverter implements Converter<String, UUID> {
 

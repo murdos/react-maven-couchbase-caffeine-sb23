@@ -13,12 +13,17 @@
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
 
+logging:
+  level:
+    org.springframework.data.couchbase.repository.query: DEBUG
+
 spring:
+  couchbase:
+    connection-string: couchbase://localhost
+    username: Administrator
+    password: password
   application:
     name: sampleReactCouchbaseCaffeine
-  couchbase:
-    username: jhipster
-    password: password
   jackson:
     serialization:
       write-durations-as-timestamps: false
@@ -53,11 +58,11 @@ server:
 # ===================================================================
 
 jhipster:
-  clientApp:
-    name: 'sampleReactCouchbaseCaffeineApp'
   database:
     couchbase:
-      bucket-name: testBucket
+      bucket-name: sampleReactCouchbaseCaffeine
+  clientApp:
+    name: 'sampleReactCouchbaseCaffeineApp'
   logging:
     # To test json console appender
     use-json-format: false

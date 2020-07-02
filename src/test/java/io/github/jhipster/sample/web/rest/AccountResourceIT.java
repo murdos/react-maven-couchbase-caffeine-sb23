@@ -13,6 +13,7 @@ import io.github.jhipster.sample.service.dto.UserDTO;
 import io.github.jhipster.sample.web.rest.vm.KeyAndPasswordVM;
 import io.github.jhipster.sample.web.rest.vm.ManagedUserVM;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -54,6 +55,11 @@ public class AccountResourceIT {
 
     @Autowired
     private MockMvc restAccountMockMvc;
+
+    @BeforeEach
+    private void setup() {
+        userRepository.deleteAll();
+    }
 
     @Test
     @WithUnauthenticatedMockUser
@@ -388,7 +394,7 @@ public class AccountResourceIT {
 
     @Test
     public void testActivateAccount() throws Exception {
-        final String activationKey = "some activation key";
+        final String activationKey = "some_activation_key";
         User user = new User();
         user.setLogin("activate-account");
         user.setEmail("activate-account@example.com");

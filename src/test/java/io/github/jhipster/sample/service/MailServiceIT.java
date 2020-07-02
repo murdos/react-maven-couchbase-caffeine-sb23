@@ -1,17 +1,18 @@
 package io.github.jhipster.sample.service;
 
 import io.github.jhipster.config.JHipsterProperties;
+import io.github.jhipster.sample.CouchbaseTestContainerExtension;
+import io.github.jhipster.sample.SampleReactCouchbaseCaffeineApp;
 import io.github.jhipster.sample.config.Constants;
 import io.github.jhipster.sample.domain.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.context.MessageSourceAutoConfiguration;
-import org.springframework.boot.autoconfigure.thymeleaf.ThymeleafAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.MessageSource;
 import org.springframework.mail.MailSendException;
@@ -41,7 +42,8 @@ import static org.mockito.Mockito.*;
 /**
  * Integration tests for {@link MailService}.
  */
-@SpringBootTest(classes = {ThymeleafAutoConfiguration.class, MessageSourceAutoConfiguration.class, JHipsterProperties.class})
+@SpringBootTest(classes = SampleReactCouchbaseCaffeineApp.class)
+@ExtendWith(CouchbaseTestContainerExtension.class)
 public class MailServiceIT {
 
     private static final String[] languages = {

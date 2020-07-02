@@ -22,7 +22,8 @@
     <logger name="org.apache.catalina.startup.DigesterFactory" level="OFF"/>
     <logger name="org.bson" level="WARN"/>
     <logger name="org.hibernate.validator" level="WARN"/>
-    <logger name="com.couchbase.client" level="WARN"/>
+    <logger name="com.couchbase.client" level="DEBUG"/>
+    <logger name="org.springframework.data.couchbase" level="DEBUG"/>
     <logger name="org.testcontainers" level="INFO"/>
     <logger name="org.github.couchmove" level="INFO"/>
     <logger name="org.reflections" level="WARN"/>
