@@ -9,9 +9,11 @@ import io.github.jhipster.sample.service.dto.UserDTO;
 import io.github.jhipster.sample.service.mapper.UserMapper;
 import io.github.jhipster.sample.web.rest.vm.ManagedUserVM;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.junit.FixMethodOrder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -37,6 +39,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * Integration tests for the {@link UserResource} REST controller.
  */
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @AutoConfigureMockMvc
 @WithMockUser(authorities = AuthoritiesConstants.ADMIN)
 @SpringBootTest(classes = SampleReactCouchbaseCaffeineApp.class)
@@ -81,7 +84,8 @@ public class UserResourceIT {
     private User user;
 
     @BeforeEach
-    public void setup() {
+    public void setup() throws InterruptedException {
+        userRepository.deleteAll();
         cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).invalidate();
         cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE).invalidate();
     }
