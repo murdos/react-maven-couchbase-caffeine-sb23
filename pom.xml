@@ -17,7 +17,7 @@
         </repository>
         <repository>
             <id>spring-snapshots</id>
-            <url>https://repo.spring.io/lib-snapshots</url>
+            <url>https://repo.spring.io/libs-snapshot</url>
         </repository>
         <repository>
             <id>ossrh-snapshots</id>
